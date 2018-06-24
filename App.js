@@ -37,7 +37,8 @@ export default class App extends Component {
       progress3:0,
       progress4:0,
       progress5:0,
-      visible:false
+      visible:false,
+      readLink:false
     }
   }
 
@@ -91,6 +92,12 @@ export default class App extends Component {
           if(self.state.data.images.length>1){
             self.animate2();
           } 
+
+          if(self.state.data.images.length==1){
+            self.setState({
+              readLink:true
+            });
+          }
           
         }
         this.setState({ progress:progress });
@@ -116,6 +123,11 @@ export default class App extends Component {
           if(self.state.data.images.length>2){
             self.animate3();
           } 
+          if(self.state.data.images.length==2){
+            self.setState({
+              readLink:true
+            });
+          }
         }
         this.setState({ progress2:progress2 });
       }, TIME_FOR_EACH_SLIDE); 
@@ -140,6 +152,11 @@ export default class App extends Component {
           if(self.state.data.images.length>3){
             self.animate4();
           } 
+          if(self.state.data.images.length==3){
+            self.setState({
+              readLink:true
+            });
+          }
         }
         this.setState({ progress3:progress3 });
       }, TIME_FOR_EACH_SLIDE); 
@@ -164,6 +181,11 @@ export default class App extends Component {
           if(self.state.data.images.length>4){
             self.animate5();
           } 
+          if(self.state.data.images.length==4){
+            self.setState({
+              readLink:true
+            });
+          }
         }
         this.setState({ progress4:progress4 });
       }, TIME_FOR_EACH_SLIDE); 
@@ -185,12 +207,22 @@ export default class App extends Component {
         if (progress5 > 1) {
           progress5 = 1;
           clearInterval(fifthInterval);
+          //todo conditional
+          if(self.state.data.images.length==5){
+            self.setState({
+              readLink:true
+            });
+          }
+          
         }
         this.setState({ progress5 :progress5});
       }, TIME_FOR_EACH_SLIDE); 
   }
 
   slideBack(){
+    this.setState({
+      readLink:false
+    })
     if(this.state.activeIndex!=1){
       switch(this.state.activeIndex){
         case 2:
@@ -301,17 +333,17 @@ export default class App extends Component {
       data:{
         titles:[
           "Hello World, this is the forst image",
-          // "Hello World, this is the second image",
-          // "Hello World, this is the third image",
-          // "Hello World, this is the fourth image",
+          "Hello World, this is the second image",
+          "Hello World, this is the third image",
+          "Hello World, this is the fourth image",
           "Hello World, this is the fifth image",
         ],
         images:[
           "https://pre00.deviantart.net/66e2/th/pre/f/2016/240/a/c/the_new_avengers_hd_mobile_wallpaper_by_theincrediblejake-dafkr67.jpg",
-          "https://upload.wikimedia.org/wikipedia/ta/1/13/Avengers-Age-of-Ultron-2.jpg",
           "https://www.mordeo.org/files/uploads/2018/04/Thor-In-Avengers-Infinity-War-HD-Mobile-Wallpaper-950x1689.jpg",
           "https://www.wallpapermobi.com/storage/upload/user_id_17/thumbnail/avengers-vs-batman-2017-05-31-01-17-49.jpg",
-          "https://i.pinimg.com/originals/e7/25/a0/e725a08e642d271e3920427544ea4555.jpg"
+          "https://i.pinimg.com/originals/e7/25/a0/e725a08e642d271e3920427544ea4555.jpg",
+          "http://www.modafinilsale.com/data/out/543/231327123-wallpapers-for-lumia-630.jpg"
         ]
       },
     });
@@ -356,24 +388,38 @@ export default class App extends Component {
         <View style={{flex:1,backgroundColor:'#fff'}}>
           <Image style={{flex:1}} source={{uri:this.state.activeImage}}/>
           <View style={{position:'absolute',flex:1,flexDirection:'column'}}>
-            <View>
-            <Image style={{height:verticalScale(50),width:verticalScale(50),marginRight:verticalScale(5),borderRadius:verticalScale(50)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
+          {
+            isPaused==false &&
+            <View style={{paddingTop:verticalScale(10),paddingLeft:scale(20),flexDirection:'row'}}>
+              <Image style={{height:verticalScale(50),width:verticalScale(50),marginRight:verticalScale(5),borderRadius:verticalScale(25)}} resizeMode="contain" source={{uri:"https://cdn.dribbble.com/users/223408/screenshots/2134810/me-dribbble-size-001-001_1x.png"}}/>
+              <Text style={{color:'#fff',fontWeight:'bold',fontSize:scale(18),textAlignVertical:'center',paddingLeft:scale(10)}}>Avinash Solanki</Text>
             </View>
+          }
+            
             
             <View style={{backgroundColor:'transparent',flex:1,flexDirection:'row'}}>
               <TouchableOpacity 
               onPressIn={()=>this.startTimerAction()}
               onPressOut={()=>{this.decideTimerFate('b')}}
               style={{flex:1}}>
-                <View style={{height:verticalScale(540)}}></View>
+                <View style={{height:verticalScale(this.state.readLink?500:520)}}></View>
               </TouchableOpacity>
               <TouchableOpacity 
               onPressIn={()=>this.startTimerAction()}
               onPressOut={()=>{this.decideTimerFate('f')}}
               style={{flex:1}}>
-                <View style={{height:verticalScale(540)}}></View>
+                <View style={{height:verticalScale(this.state.readLink?500:520)}}></View>
               </TouchableOpacity>
             </View>
+
+            {
+              this.state.readLink &&
+              <View style={{height:verticalScale(20),flex:1}}>
+                <Text style={{color:'#ccc',fontSize:verticalScale(18),textAlign:'right',paddingRight:scale(20)}} onPress={()=>Alert.alert("TODO","Map with local screen logic")}>Read More </Text>
+              </View>
+            }
+           
+            
             {
               isPaused==false &&
               <View style={{backgroundColor:'transparent',flex:1,flexDirection:'row',height:verticalScale(50),width:deviceWidth,alignItems:'center',justifyContent:'space-around'}}>
