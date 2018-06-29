@@ -9,19 +9,22 @@ import {
   Platform,
   StyleSheet,
   Image,
+  ImageBackground,
   ScrollView,
   Text,
   Alert,
   TouchableHighlight,
   TouchableOpacity,
   Dimensions,
+  ProgressBarAndroid,
   View
 } from 'react-native';
 import {scale,verticalScale} from './resources/scaling';
 import * as Progress from 'react-native-progress';
 import SlidingUpPanel from 'rn-sliding-up-panel';
-var TIME_FOR_EACH_SLIDE=100;// 2seconds
+var TIME_FOR_EACH_SLIDE=70;// 2seconds
 var deviceWidth=Dimensions.get('window').width;
+var deviceHeight=Dimensions.get('window').height;
 var firstInterval,secondInterval,thirdInterval,fourthInterval,fifthInterval;
 var press,pressDuration=0,isPaused=false;
 export default class App extends Component {
@@ -42,8 +45,6 @@ export default class App extends Component {
     }
   }
 
-
-
   startSlideShow(){
     
     this.setState({
@@ -57,25 +58,35 @@ export default class App extends Component {
   }
 
   resetSlider(){
+
     this.setState({
       progress:0,
       progress2:0,
       progress3:0,
       progress4:0,
-      progress5:0
+      progress5:0,
+      readLink:false
     });
+
     clearInterval(firstInterval);
     clearInterval(secondInterval); 
     clearInterval(thirdInterval);
     clearInterval(fourthInterval);
     clearInterval(fifthInterval);
+
   }
 
   animate() {
     let progress = 0;
     console.log("animating");
+    
     this.setState({ progress:0 });
     var self=this;
+    if(self.state.data.images.length==1){
+      self.setState({
+        readLink:true
+      });
+    }
     self.setState({
       activeImage:self.state.data.images[0],
       activeIndex:1
@@ -93,11 +104,7 @@ export default class App extends Component {
             self.animate2();
           } 
 
-          if(self.state.data.images.length==1){
-            self.setState({
-              readLink:true
-            });
-          }
+         
           
         }
         this.setState({ progress:progress });
@@ -107,12 +114,18 @@ export default class App extends Component {
   animate2() {
     let progress2 = 0;
     console.log("animating 2");
+    
     this.setState({ progress2:0 });
     var self=this;
     self.setState({
       activeImage:self.state.data.images[1],
       activeIndex:2
     });
+    if(self.state.data.images.length==2){
+      self.setState({
+        readLink:true
+      });
+    }
      secondInterval=setInterval(() => {
       if(isPaused==false)
         progress2 += 1 / 50;
@@ -123,11 +136,7 @@ export default class App extends Component {
           if(self.state.data.images.length>2){
             self.animate3();
           } 
-          if(self.state.data.images.length==2){
-            self.setState({
-              readLink:true
-            });
-          }
+          
         }
         this.setState({ progress2:progress2 });
       }, TIME_FOR_EACH_SLIDE); 
@@ -136,12 +145,19 @@ export default class App extends Component {
   animate3() {
     let progress3 = 0;
     console.log("animating 3");
+    
     this.setState({ progress3:0});
+
     var self=this;
     self.setState({
       activeImage:self.state.data.images[2],
       activeIndex:3
     });
+    if(self.state.data.images.length==3){
+      self.setState({
+        readLink:true
+      });
+    }
      thirdInterval=setInterval(() => {
       if(isPaused==false)
         progress3 += 1 / 50;
@@ -152,11 +168,7 @@ export default class App extends Component {
           if(self.state.data.images.length>3){
             self.animate4();
           } 
-          if(self.state.data.images.length==3){
-            self.setState({
-              readLink:true
-            });
-          }
+          
         }
         this.setState({ progress3:progress3 });
       }, TIME_FOR_EACH_SLIDE); 
@@ -165,12 +177,18 @@ export default class App extends Component {
   animate4() {
     let progress4 = 0;
     console.log("animating 4");
+    
     this.setState({ progress4:0 });
     var self=this;
     self.setState({
       activeImage:self.state.data.images[3],
       activeIndex:4
     });
+    if(self.state.data.images.length==4){
+      self.setState({
+        readLink:true
+      });
+    }
      fourthInterval=setInterval(() => {
       if(isPaused==false)
         progress4+= 1 / 50;
@@ -181,11 +199,7 @@ export default class App extends Component {
           if(self.state.data.images.length>4){
             self.animate5();
           } 
-          if(self.state.data.images.length==4){
-            self.setState({
-              readLink:true
-            });
-          }
+         
         }
         this.setState({ progress4:progress4 });
       }, TIME_FOR_EACH_SLIDE); 
@@ -193,6 +207,7 @@ export default class App extends Component {
 
   animate5() {
     let progress5 = 0;
+    
     console.log("animating 4");
     this.setState({ progress5:0 });
     var self=this;
@@ -200,19 +215,25 @@ export default class App extends Component {
       activeImage:self.state.data.images[4],
       activeIndex:5
     });
+    if(self.state.data.images.length==5){
+      self.setState({
+        readLink:true
+      });
+    }
      fifthInterval=setInterval(() => {
       if(isPaused==false)
         progress5+= 1 / 50;
         //console.log("");
         if (progress5 > 1) {
-          progress5 = 1;
+          progress5 = 0;
+          self.resetSlider();
+          self.setState({fullScreenMode: false});
           clearInterval(fifthInterval);
           //todo conditional
-          if(self.state.data.images.length==5){
-            self.setState({
-              readLink:true
-            });
-          }
+
+          
+          
+         
           
         }
         this.setState({ progress5 :progress5});
@@ -339,154 +360,212 @@ export default class App extends Component {
           "Hello World, this is the fifth image",
         ],
         images:[
-          "https://pre00.deviantart.net/66e2/th/pre/f/2016/240/a/c/the_new_avengers_hd_mobile_wallpaper_by_theincrediblejake-dafkr67.jpg",
-          "https://www.mordeo.org/files/uploads/2018/04/Thor-In-Avengers-Infinity-War-HD-Mobile-Wallpaper-950x1689.jpg",
-          "https://www.wallpapermobi.com/storage/upload/user_id_17/thumbnail/avengers-vs-batman-2017-05-31-01-17-49.jpg",
-          "https://i.pinimg.com/originals/e7/25/a0/e725a08e642d271e3920427544ea4555.jpg",
-          "http://www.modafinilsale.com/data/out/543/231327123-wallpapers-for-lumia-630.jpg"
+          // "https://pre00.deviantart.net/66e2/th/pre/f/2016/240/a/c/the_new_avengers_hd_mobile_wallpaper_by_theincrediblejake-dafkr67.jpg",
+          // "https://www.mordeo.org/files/uploads/2018/04/Thor-In-Avengers-Infinity-War-HD-Mobile-Wallpaper-950x1689.jpg",
+          // "https://www.wallpapermobi.com/storage/upload/user_id_17/thumbnail/avengers-vs-batman-2017-05-31-01-17-49.jpg",
+          // "https://i.pinimg.com/originals/e7/25/a0/e725a08e642d271e3920427544ea4555.jpg",
+          // "http://www.modafinilsale.com/data/out/543/231327123-wallpapers-for-lumia-630.jpg"
+          1,2,3,4,5
         ]
       },
     });
+
   }
 
 
   render() {
+    var self=this;
     return (
       <View style={{flex:1,flexDirection:'column'}}>
           <View style={{flex:1}}>
-            <View style={{height:verticalScale(100)}}>
-            <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={{margin:scale(10)}}>
-              
-              <Image style={{height:verticalScale(70),width:verticalScale(70),marginRight:verticalScale(5),borderRadius:verticalScale(70)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
-              <Image style={{height:verticalScale(70),width:verticalScale(70),marginRight:verticalScale(5),borderRadius:verticalScale(70)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
-              <Image style={{height:verticalScale(70),width:verticalScale(70),marginRight:verticalScale(5),borderRadius:verticalScale(70)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
-              <Image style={{height:verticalScale(70),width:verticalScale(70),marginRight:verticalScale(5),borderRadius:verticalScale(70)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
-              <Image style={{height:verticalScale(70),width:verticalScale(70),marginRight:verticalScale(5),borderRadius:verticalScale(70)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
-              <Image style={{height:verticalScale(70),width:verticalScale(70),marginRight:verticalScale(5),borderRadius:verticalScale(70)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
-              <Image style={{height:verticalScale(70),width:verticalScale(70),marginRight:verticalScale(5),borderRadius:verticalScale(70)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
-              <Image style={{height:verticalScale(70),width:verticalScale(70),marginRight:verticalScale(5),borderRadius:verticalScale(70)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
-              <Image style={{height:verticalScale(70),width:verticalScale(70),marginRight:verticalScale(5),borderRadius:verticalScale(70)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
-              <Image style={{height:verticalScale(70),width:verticalScale(70),marginRight:verticalScale(5),borderRadius:verticalScale(70)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
-              <Image style={{height:verticalScale(70),width:verticalScale(70),marginRight:verticalScale(5),borderRadius:verticalScale(70)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
-              <Image style={{height:verticalScale(70),width:verticalScale(70),marginRight:verticalScale(5),borderRadius:verticalScale(70)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
+            <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+            <ScrollView 
+            contentContainerStyle={{alignItems:'center',justifyContent:'center'}}
+            showsHorizontalScrollIndicator={false} horizontal={true}>
+              <Image style={{height:((deviceHeight*0.8)/10),width:((deviceHeight*0.8)/10),marginRight:(5),marginLeft:(5),borderRadius:((deviceHeight*0.8)/10)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
+              <Image style={{height:((deviceHeight*0.8)/10),width:((deviceHeight*0.8)/10),marginRight:(5),marginLeft:(5),borderRadius:((deviceHeight*0.8)/10)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
+              <Image style={{height:((deviceHeight*0.8)/10),width:((deviceHeight*0.8)/10),marginRight:(5),marginLeft:(5),borderRadius:((deviceHeight*0.8)/10)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
+              <Image style={{height:((deviceHeight*0.8)/10),width:((deviceHeight*0.8)/10),marginRight:(5),marginLeft:(5),borderRadius:((deviceHeight*0.8)/10)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
+              <Image style={{height:((deviceHeight*0.8)/10),width:((deviceHeight*0.8)/10),marginRight:(5),marginLeft:(5),borderRadius:((deviceHeight*0.8)/10)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
+              <Image style={{height:((deviceHeight*0.8)/10),width:((deviceHeight*0.8)/10),marginRight:(5),marginLeft:(5),borderRadius:((deviceHeight*0.8)/10)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
+              <Image style={{height:((deviceHeight*0.8)/10),width:((deviceHeight*0.8)/10),marginRight:(5),marginLeft:(5),borderRadius:((deviceHeight*0.8)/10)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
+              <Image style={{height:((deviceHeight*0.8)/10),width:((deviceHeight*0.8)/10),marginRight:(5),marginLeft:(5),borderRadius:((deviceHeight*0.8)/10)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
+              <Image style={{height:((deviceHeight*0.8)/10),width:((deviceHeight*0.8)/10),marginRight:(5),marginLeft:(5),borderRadius:((deviceHeight*0.8)/10)}} resizeMode="contain" source={{uri:"http://kukusi.com/wp-content/uploads/2010/09/sp1-440x440.jpg"}}/>
             </ScrollView>
           </View>
-          <TouchableHighlight onPress={()=>this.startSlideShow()} style={{flex:1}}>
+          <TouchableHighlight onPress={()=>this.startSlideShow()} style={{flex:9}}>
             <Image style={{flex:1}} source={{uri:"http://hdwallpaper.site/wp-content/uploads/2018/05/wallpaper-for-mobile-marvel-awesome-avengers-phone-wallpaper-hd-wallpapers-pinterest-of-wallpaper-for-mobile-marvel.png"}}/>
           </TouchableHighlight>
         </View>
       {
         this.state.fullScreenMode==true &&
         <SlidingUpPanel
-          
           allowMomentum={true}
           visible={this.state.fullScreenMode}
           onRequestClose={() => {
             this.setState({fullScreenMode: false})
             this.resetSlider();
           }}>
-        <View style={{flex:1,backgroundColor:'#fff'}}>
-          <Image style={{flex:1}} source={{uri:this.state.activeImage}}/>
-          <View style={{position:'absolute',flex:1,flexDirection:'column'}}>
+        <View style={{flex:1,backgroundColor:'#ccc',padding:isPaused==true?30:0}}>
+          <ImageBackground style={{flex:1}}  source={this.state.activeImage==1?require('./resources/img/1.jpg'):this.state.activeImage==2?require('./resources/img/2.jpg'):this.state.activeImage==3?require('./resources/img/3.jpg'):this.state.activeImage==4?require('./resources/img/4.jpg'):require('./resources/img/2.jpg')} >
+          <View style={{position:'absolute',left:0,top:0,bottom:0,right:0}}>
           {
             isPaused==false &&
-            <View style={{paddingTop:verticalScale(10),paddingLeft:scale(20),flexDirection:'row'}}>
-              <Image style={{height:verticalScale(50),width:verticalScale(50),marginRight:verticalScale(5),borderRadius:verticalScale(25)}} resizeMode="contain" source={{uri:"https://cdn.dribbble.com/users/223408/screenshots/2134810/me-dribbble-size-001-001_1x.png"}}/>
-              <Text style={{color:'#fff',fontWeight:'bold',fontSize:scale(18),textAlignVertical:'center',paddingLeft:scale(10)}}>Avinash Solanki</Text>
+            <View style={{flex:1,paddingLeft:verticalScale(20),flexDirection:'row',alignItems:'center'}}>
+              <Image style={{height:((deviceHeight*0.8)/10),width:((deviceHeight*0.8)/10),marginRight:(5),borderRadius:((deviceHeight*0.8)/10)}} resizeMode="contain" source={{uri:"https://cdn.dribbble.com/users/223408/screenshots/2134810/me-dribbble-size-001-001_1x.png"}}/>
+              <Text style={{color:'#fff',fontWeight:'bold',fontSize:(14),textAlignVertical:'center',paddingLeft:(10)}}>Avinash Solanki</Text>
             </View>
           }
-            
-            
-            <View style={{backgroundColor:'transparent',flex:1,flexDirection:'row'}}>
-              <TouchableOpacity 
-              onPressIn={()=>this.startTimerAction()}
-              onPressOut={()=>{this.decideTimerFate('b')}}
-              style={{flex:1}}>
-                <View style={{height:verticalScale(this.state.readLink?500:520)}}></View>
-              </TouchableOpacity>
-              <TouchableOpacity 
-              onPressIn={()=>this.startTimerAction()}
-              onPressOut={()=>{this.decideTimerFate('f')}}
-              style={{flex:1}}>
-                <View style={{height:verticalScale(this.state.readLink?500:520)}}></View>
-              </TouchableOpacity>
-            </View>
-
-            {
+            <View style={{flex:9,flexDirection:'column'}}>
+              <View style={{flex:8}}>
+              <View style={{flex:1}}>
+                   {
               this.state.readLink &&
-              <View style={{height:verticalScale(20),flex:1}}>
-                <Text style={{color:'#ccc',fontSize:verticalScale(18),textAlign:'right',paddingRight:scale(20)}} onPress={()=>Alert.alert("TODO","Map with local screen logic")}>Read More </Text>
+              <View style={{height:(20),flex:1}}>
+                <Text style={{color:'#000',fontSize:(18),textAlign:'right',paddingRight:(20)}} onPress={()=>Alert.alert("TODO","Map with local screen logic")}>Read More </Text>
               </View>
             }
-           
-            
-            {
-              isPaused==false &&
-              <View style={{backgroundColor:'transparent',flex:1,flexDirection:'row',height:verticalScale(50),width:deviceWidth,alignItems:'center',justifyContent:'space-around'}}>
+                </View>
+                <View style={{flex:9,flexDirection:'row'}}>
+                <TouchableOpacity 
+                style={{flex:1}}
+                onPressIn={()=>this.startTimerAction()}
+                onPressOut={()=>{this.decideTimerFate('b')}}
+                style={{flex:1}}>
+                  <View style={{flex:1}}></View>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                style={{flex:1}}
+                onPressIn={()=>this.startTimerAction()}
+                onPressOut={()=>{this.decideTimerFate('f')}}
+                style={{flex:1}}>
+                  <View style={{flex:1}}></View>
+                </TouchableOpacity>
+                </View>
+                
+              </View>
+
               {
-                this.state.data.images.length>0 &&
-                <Progress.Bar
-                color="#fff"
-                animated={false}
-                style={{backgroundColor:'#939393',opacity:0.8,height:verticalScale(5)}}
-                borderWidth={0}
-                width={scale(deviceWidth/(this.state.data.images.length+1))}
-                progress={this.state.progress}
-                indeterminate={this.state.indeterminate}
-                />
+              isPaused==false &&
+              <View style={{flex:1,marginBottom:10,flexDirection:'row',width:deviceWidth,alignItems:'center',justifyContent:'space-around'}}>
+              {
+                // this.state.data.images.length>0 &&
+                // <Progress.Bar
+                // color="#fff"
+                // //animated={false}
+                // style={{backgroundColor:'#939393',opacity:0.8,height:(5)}}
+                // borderWidth={0}
+                // width={(deviceWidth/(7))}
+                // progress={this.state.progress}
+                // indeterminate={this.state.indeterminate}
+                // />
+              <ProgressBarAndroid 
+              styleAttr="Horizontal" 
+              height={2}
+              animating={true}
+              width={(deviceWidth/(7))}
+              color="#fff"
+              indeterminate={false} 
+              progress={this.state.progress}
+              />
               }
+              
               {
                 this.state.data.images.length>1 &&
-                <Progress.Bar
-                color="#fff"
-                animated={false}
-                borderWidth={0}
-                style={{backgroundColor:'#939393',opacity:0.8,height:verticalScale(5)}}
-                width={scale(deviceWidth/(this.state.data.images.length+1))}
-                progress={this.state.progress2}
-                indeterminate={this.state.indeterminate}
-                />
+                <ProgressBarAndroid 
+              styleAttr="Horizontal" 
+              height={2}
+              animating={true}
+              width={(deviceWidth/(7))}
+              color="#fff"
+              indeterminate={false} 
+              progress={this.state.progress2}
+              />
+                // <Progress.Bar
+                // color="#fff"
+                // //animated={false}
+                // borderWidth={0}
+                // style={{backgroundColor:'#939393',opacity:0.8,height:(5)}}
+                // width={(deviceWidth/7)}
+                // progress={this.state.progress2}
+                // indeterminate={this.state.indeterminate}
+                // />
               }
               {
-                this.state.data.images.length>2 &&
-                <Progress.Bar
+                <ProgressBarAndroid 
+                styleAttr="Horizontal" 
+                height={2}
+                animating={true}
+                width={(deviceWidth/(7))}
                 color="#fff"
-                animated={false}
-                borderWidth={0}
-                style={{backgroundColor:'#939393',opacity:0.8,height:verticalScale(5)}}
-                width={scale(deviceWidth/this.state.data.images.length)}
+                indeterminate={false} 
                 progress={this.state.progress3}
-                indeterminate={this.state.indeterminate}
                 />
+                // this.state.data.images.length>2 &&
+                // <Progress.Bar
+                // color="#fff"
+                // //animated={false}
+                // borderWidth={0}
+                // style={{backgroundColor:'#939393',opacity:0.8,height:(5)}}
+                // width={(deviceWidth/7)}
+                // progress={this.state.progress3}
+                // indeterminate={this.state.indeterminate}
+                // />
               }
               {
-                this.state.data.images.length>3 &&
-                <Progress.Bar
+                <ProgressBarAndroid 
+                styleAttr="Horizontal" 
+                height={2}
+                animating={true}
+                width={(deviceWidth/(7))}
                 color="#fff"
-                animated={false}
-                borderWidth={0}
-                style={{backgroundColor:'#939393',opacity:0.8,height:verticalScale(5)}}
-                width={scale(deviceWidth/(this.state.data.images.length+1))}
+                indeterminate={false} 
                 progress={this.state.progress4}
-                indeterminate={this.state.indeterminate}
                 />
+                // this.state.data.images.length>3 &&
+                // <Progress.Bar
+                // color="#fff"
+                // //animated={false}
+                // borderWidth={0}
+                // style={{backgroundColor:'#939393',opacity:0.8,height:(5)}}
+                // width={(deviceWidth/7)}
+                // progress={this.state.progress4}
+                // indeterminate={this.state.indeterminate}
+                // />
               }
               {
-                this.state.data.images.length>4 &&
-                <Progress.Bar
+                <ProgressBarAndroid 
+                styleAttr="Horizontal" 
+                height={2}
+                animating={true}
+                width={(deviceWidth/(7))}
                 color="#fff"
-                animated={false}
-                borderWidth={0}
-                style={{backgroundColor:'#939393',opacity:0.8,height:verticalScale(5)}}
-                width={scale(deviceWidth/(this.state.data.images.length+1))}
+                indeterminate={false} 
                 progress={this.state.progress5}
-                indeterminate={this.state.indeterminate}
                 />
+                // this.state.data.images.length>4 &&
+                // <Progress.Bar
+                // color="#fff"
+                // //animated={false}
+                // borderWidth={0}
+                // style={{backgroundColor:'#939393',opacity:0.8,height:(5)}}
+                // width={(deviceWidth/7)}
+                // progress={this.state.progress5}
+                // indeterminate={this.state.indeterminate}
+                // />
               }
               
             </View>
             }
+            </View>
+          
+
+           
+           
+            
+            
           </View>
+          </ImageBackground>
         </View>
         </SlidingUpPanel>
       }
