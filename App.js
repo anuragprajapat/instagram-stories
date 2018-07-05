@@ -325,7 +325,7 @@ export default class App extends Component {
     var self=this;
     press=setInterval(()=>{
 
-      if(pressDuration>200){
+      if(pressDuration>100){
         //Alert.alert("hey");
         isPaused=true
       }
@@ -337,7 +337,7 @@ export default class App extends Component {
     //Alert.alert("heyy");
     isPaused=false
     clearInterval(press);
-    if(pressDuration<199){
+    if(pressDuration<99){
       if(action=='b')
       this.slideBack();
       if(action=='f')
@@ -360,12 +360,12 @@ export default class App extends Component {
           "Hello World, this is the fifth image",
         ],
         images:[
-          // "https://pre00.deviantart.net/66e2/th/pre/f/2016/240/a/c/the_new_avengers_hd_mobile_wallpaper_by_theincrediblejake-dafkr67.jpg",
-          // "https://www.mordeo.org/files/uploads/2018/04/Thor-In-Avengers-Infinity-War-HD-Mobile-Wallpaper-950x1689.jpg",
-          // "https://www.wallpapermobi.com/storage/upload/user_id_17/thumbnail/avengers-vs-batman-2017-05-31-01-17-49.jpg",
-          // "https://i.pinimg.com/originals/e7/25/a0/e725a08e642d271e3920427544ea4555.jpg",
-          // "http://www.modafinilsale.com/data/out/543/231327123-wallpapers-for-lumia-630.jpg"
-          1,2,3,4,5
+          "http://hdwallpaper.site/wp-content/uploads/2018/05/wallpaper-for-mobile-marvel-awesome-avengers-phone-wallpaper-hd-wallpapers-pinterest-of-wallpaper-for-mobile-marvel.png",
+          "https://www.mordeo.org/files/uploads/2018/04/Thor-In-Avengers-Infinity-War-HD-Mobile-Wallpaper-950x1689.jpg",
+          "https://www.wallpapermobi.com/storage/upload/user_id_17/thumbnail/avengers-vs-batman-2017-05-31-01-17-49.jpg",
+          "https://i.pinimg.com/originals/e7/25/a0/e725a08e642d271e3920427544ea4555.jpg",
+          "http://www.modafinilsale.com/data/out/543/231327123-wallpapers-for-lumia-630.jpg"
+          //1,2,3,4,5
         ]
       },
     });
@@ -394,7 +394,7 @@ export default class App extends Component {
             </ScrollView>
           </View>
           <TouchableHighlight onPress={()=>this.startSlideShow()} style={{flex:9}}>
-            <Image style={{flex:1}} source={{uri:"http://hdwallpaper.site/wp-content/uploads/2018/05/wallpaper-for-mobile-marvel-awesome-avengers-phone-wallpaper-hd-wallpapers-pinterest-of-wallpaper-for-mobile-marvel.png"}}/>
+          <Image style={{flex:1}} source={{uri:"http://hdwallpaper.site/wp-content/uploads/2018/05/wallpaper-for-mobile-marvel-awesome-avengers-phone-wallpaper-hd-wallpapers-pinterest-of-wallpaper-for-mobile-marvel.png"}}/>
           </TouchableHighlight>
         </View>
       {
@@ -407,7 +407,8 @@ export default class App extends Component {
             this.resetSlider();
           }}>
         <View style={{flex:1,backgroundColor:'#ccc',padding:isPaused==true?30:0}}>
-          <ImageBackground style={{flex:1}}  source={this.state.activeImage==1?require('./resources/img/1.jpg'):this.state.activeImage==2?require('./resources/img/2.jpg'):this.state.activeImage==3?require('./resources/img/3.jpg'):this.state.activeImage==4?require('./resources/img/4.jpg'):require('./resources/img/2.jpg')} >
+          {/* <ImageBackground style={{flex:1}}  source={this.state.activeImage==1?require('./resources/img/1.jpg'):this.state.activeImage==2?require('./resources/img/2.jpg'):this.state.activeImage==3?require('./resources/img/3.jpg'):this.state.activeImage==4?require('./resources/img/4.jpg'):require('./resources/img/2.jpg')} > */}
+          <Image style={{flex:1}} source={{uri:this.state.activeImage}}/>
           <View style={{position:'absolute',left:0,top:0,bottom:0,right:0}}>
           {
             isPaused==false &&
@@ -558,14 +559,8 @@ export default class App extends Component {
             </View>
             }
             </View>
-          
-
-           
-           
-            
-            
           </View>
-          </ImageBackground>
+        
         </View>
         </SlidingUpPanel>
       }
