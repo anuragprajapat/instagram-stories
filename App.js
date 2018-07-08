@@ -29,8 +29,6 @@ var firstInterval,secondInterval,thirdInterval,fourthInterval,fifthInterval;
 var press,pressDuration=0,isPaused=false;
 export default class App extends Component {
 
-  
-
   constructor(props){
     super(props);
     this.state={
@@ -400,13 +398,14 @@ export default class App extends Component {
       {
         this.state.fullScreenMode==true &&
         <SlidingUpPanel
+          style={{flex:1}}
           allowMomentum={true}
           visible={this.state.fullScreenMode}
           onRequestClose={() => {
             this.setState({fullScreenMode: false})
             this.resetSlider();
           }}>
-        <View style={{flex:1,backgroundColor:'#ccc',padding:isPaused==true?30:0}}>
+        <View style={{flex:1,backgroundColor:'#ccc',padding:isPaused==true?30:0,height:500}}>
           {/* <ImageBackground style={{flex:1}}  source={this.state.activeImage==1?require('./resources/img/1.jpg'):this.state.activeImage==2?require('./resources/img/2.jpg'):this.state.activeImage==3?require('./resources/img/3.jpg'):this.state.activeImage==4?require('./resources/img/4.jpg'):require('./resources/img/2.jpg')} > */}
           <Image style={{flex:1}} source={{uri:this.state.activeImage}}/>
           <View style={{position:'absolute',left:0,top:0,bottom:0,right:0}}>
